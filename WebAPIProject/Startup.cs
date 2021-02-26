@@ -33,7 +33,8 @@ namespace WebAPIProject
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIProject", Version = "v1" });
             });
-            services.AddSingleton<IProductService, DbProductService>();
+            services.AddSingleton<IProductService, ProductService>();
+            services.AddSingleton<ICategoryService, CategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,7 +10,9 @@ namespace WebAPIProject.Services
     {
         void AddProduct(Product product); // CREATE
         Product GetProductById(int productId); // READ
-        List<Product> GetAllProducts();
+        List<Product> GetAllProducts(); // READ
+        int GetTotalPrice(); // READ
+        List<Product> GetProductsWithCategories();
         Product UpdateProductById(int IdProductToEdit, Product updatedProduct); // UPDATE
         void DeleteProductById(int productId); // DELETE
     }

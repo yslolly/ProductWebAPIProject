@@ -33,6 +33,19 @@ namespace WebAPIProject.Controllers
             return Ok(products);
         }
 
+        [HttpGet("products and categories")] // READ
+        public ActionResult<List<Product>> GetProductsWithCategories()
+        {
+            var productsWithCategories = _productService.GetProductsWithCategories();
+            return Ok(productsWithCategories);
+        }
+
+        [HttpGet("total price")]
+        public ActionResult<int> GetTotalPrice()
+        {
+            var totalPrice = _productService.GetTotalPrice();
+            return Ok(totalPrice);
+        }
         [HttpPost] // CREATE
         public ActionResult AddProduct(Product newProduct)
         {

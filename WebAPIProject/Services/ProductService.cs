@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using WebAPIProject.Models;
 
 namespace WebAPIProject.Services
 {
-    public class DbProductService : IProductService
+    public class ProductService : IProductService
     {
         public void AddProduct(Product product)
         {
@@ -42,6 +43,29 @@ namespace WebAPIProject.Services
             {
                 var product = db.Products.Find(productId);
                 return product;
+            }
+        }
+
+        public List<Product> GetProductsWithCategories()
+        {
+            using(var db = new ProductDbContext())
+            {
+                var productsWithCategories = db.Products.Include(product => product.Category).ToList();
+                return productsWithCategories;
+            }
+        }
+
+        public int GetTotalPrice()
+        {
+            using (var db = new ProductDbContext())
+            {
+                int totalPrice = 0;
+                var products = db.Products.ToList();
+                foreach (var product in products)
+                {
+                    totalPrice += product.Price;
+                }
+                return totalPrice;
             }
         }
 
