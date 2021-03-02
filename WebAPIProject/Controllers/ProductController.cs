@@ -4,14 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPIProject.DTO;
 using WebAPIProject.Models;
 using WebAPIProject.Services;
+using static WebAPIProject.Controllers.CategoryController;
 
 namespace WebAPIProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public partial class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
         public ProductController(IProductService productService)
@@ -20,24 +22,64 @@ namespace WebAPIProject.Controllers
         }
 
         [HttpGet("one")] // READ
-        public ActionResult<Product> GetProductById(int productId)
+        public ActionResult<GetProductDTO> GetProductById(int productId)
         {
             var product = _productService.GetProductById(productId);
-            return Ok(product);
+
+            var productDTO = new GetProductDTO();
+            productDTO.Id = product.Id;
+            productDTO.Name = product.Name;
+            productDTO.Price = product.Price;
+            productDTO.HiddenCode = product.HiddenCode;
+            productDTO.CategoryId = product.CategoryId;
+
+            var categoryDTO = new ResponseCategoryDTO();
+            categoryDTO.Id = product.Category.Id;
+            categoryDTO.Name = product.Category.Name;
+            productDTO.Category = categoryDTO;
+            return Ok(productDTO);
         }
 
-        [HttpGet("all")] // READ
-        public ActionResult<List<Product>> GetAllProduct()
+        [HttpGet("all without category")] // READ
+        public ActionResult<List<ResponseProductDTO>> GetAllProductsWithoutCategory()
         {
             var products = _productService.GetAllProducts();
-            return Ok(products);
+            List<ResponseProductDTO> productsDTO = new List<ResponseProductDTO>();
+
+            foreach (var product in products)
+            {
+                var productDTO = new ResponseProductDTO();
+                productDTO.Id = product.Id;
+                productDTO.Name = product.Name;
+                productDTO.Price = product.Price;
+                productDTO.HiddenCode = product.HiddenCode;
+                productsDTO.Add(productDTO);
+            }
+            return Ok(productsDTO);
         }
 
-        [HttpGet("products and categories")] // READ
-        public ActionResult<List<Product>> GetProductsWithCategories()
+        [HttpGet("products with category")] // READ
+        public ActionResult<List<GetProductDTO>> GetProductsWithCategories()
         {
             var productsWithCategories = _productService.GetProductsWithCategories();
-            return Ok(productsWithCategories);
+            List<GetProductDTO> productsWithCategoriesDTO = new List<GetProductDTO>();
+
+            foreach (var product in productsWithCategories)
+            {
+                var productDTO = new GetProductDTO();
+                productDTO.Id = product.Id;
+                productDTO.Name = product.Name;
+                productDTO.Price = product.Price;
+                productDTO.HiddenCode = product.HiddenCode;
+                productDTO.CategoryId = product.CategoryId;
+
+                var categoryDTO = new ResponseCategoryDTO();
+                categoryDTO.Id = product.Category.Id;
+                categoryDTO.Name = product.Category.Name;
+                productDTO.Category = categoryDTO;
+                productsWithCategoriesDTO.Add(productDTO);
+            }
+            return Ok(productsWithCategoriesDTO);
         }
 
         [HttpGet("total price")]
@@ -47,8 +89,13 @@ namespace WebAPIProject.Controllers
             return Ok(totalPrice);
         }
         [HttpPost] // CREATE
-        public ActionResult AddProduct(Product newProduct)
+        public ActionResult AddProduct(AddProductDTO newProductDTO) 
         {
+            var newProduct = new Product();
+            newProduct.Name = newProductDTO.Name;
+            newProduct.Price = newProductDTO.Price;
+            newProduct.HiddenCode = newProductDTO.HiddenCode;
+            newProduct.CategoryId = newProductDTO.CategoryId;
             _productService.AddProduct(newProduct);
             return Ok();
         }
@@ -61,9 +108,13 @@ namespace WebAPIProject.Controllers
         }
 
         [HttpPut] // UPDATE
-        public ActionResult<Product> UpdateProductById(int productId, Product productEditValues)
+        public ActionResult<Product> UpdateProductById(int productId, AddProductDTO productEditValues)
         {
             var product = _productService.UpdateProductById(productId, productEditValues);
+            product.Name = productEditValues.Name;
+            product.Price = productEditValues.Price;
+            product.HiddenCode = productEditValues.HiddenCode;
+            product.CategoryId = productEditValues.CategoryId;
             return Ok(product);
         }
     }

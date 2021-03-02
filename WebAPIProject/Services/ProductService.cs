@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPIProject.Db;
+using WebAPIProject.DTO;
 using WebAPIProject.Models;
 
 namespace WebAPIProject.Services
@@ -33,7 +34,7 @@ namespace WebAPIProject.Services
         {
             using (var db = new ProductDbContext())
             {
-                return db.Products.ToList();
+                return db.Products.Include(x=>x.Category).ToList(); // join voor korte weergave categorienaam
             }
         }
 
@@ -41,7 +42,7 @@ namespace WebAPIProject.Services
         {
             using (var db = new ProductDbContext())
             {
-                var product = db.Products.Find(productId);
+                var product = db.Products.Find(productId); // Find-methode gebeurt op primary key-kolom
                 return product;
             }
         }
@@ -69,13 +70,15 @@ namespace WebAPIProject.Services
             }
         }
 
-        public Product UpdateProductById(int IdProductToEdit, Product ProductEditValues)
+        public Product UpdateProductById(int idProductToEdit, AddProductDTO productEditValues)
         {
             using (var db = new ProductDbContext())
             {
-                var productToEdit = db.Products.Find(IdProductToEdit);
-                productToEdit.Name = ProductEditValues.Name;
-                productToEdit.Price = ProductEditValues.Price;
+                var productToEdit = db.Products.Find(idProductToEdit);
+                productToEdit.Name = productEditValues.Name;
+                productToEdit.Price = productEditValues.Price;
+                productToEdit.HiddenCode = productEditValues.HiddenCode;
+                productToEdit.CategoryId = productEditValues.CategoryId;
                 db.Products.Update(productToEdit);
                 db.SaveChanges();
                 return productToEdit;

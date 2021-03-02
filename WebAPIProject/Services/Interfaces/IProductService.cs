@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPIProject.DTO;
 using WebAPIProject.Models;
 
 namespace WebAPIProject.Services
@@ -12,8 +13,8 @@ namespace WebAPIProject.Services
         Product GetProductById(int productId); // READ
         List<Product> GetAllProducts(); // READ
         int GetTotalPrice(); // READ
-        List<Product> GetProductsWithCategories();
-        Product UpdateProductById(int IdProductToEdit, Product updatedProduct); // UPDATE
+        List<Product> GetProductsWithCategories(); // READ
+        Product UpdateProductById(int IdProductToEdit, AddProductDTO updatedProduct); // UPDATE
         void DeleteProductById(int productId); // DELETE
     }
 }
