@@ -59,7 +59,7 @@ namespace WebAPIProject.Controllers
         }
 
         [HttpGet("products with category")] // READ
-        public ActionResult<List<GetProductDTO>> GetProductsWithCategories()
+        public ActionResult<List<GetProductDTO>> GetProductsWithCategories() // dit datatype, anders endless loop
         {
             var productsWithCategories = _productService.GetProductsWithCategories();
             List<GetProductDTO> productsWithCategoriesDTO = new List<GetProductDTO>();
@@ -76,7 +76,9 @@ namespace WebAPIProject.Controllers
                 var categoryDTO = new ResponseCategoryDTO();
                 categoryDTO.Id = product.Category.Id;
                 categoryDTO.Name = product.Category.Name;
+
                 productDTO.Category = categoryDTO;
+
                 productsWithCategoriesDTO.Add(productDTO);
             }
             return Ok(productsWithCategoriesDTO);

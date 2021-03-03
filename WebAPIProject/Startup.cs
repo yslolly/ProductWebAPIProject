@@ -35,6 +35,7 @@ namespace WebAPIProject
             });
             services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<ICategoryService, CategoryService>();
+            services.AddSingleton<IHouseService, HouseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
