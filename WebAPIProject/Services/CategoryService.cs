@@ -44,6 +44,7 @@ namespace WebAPIProject.Services
         {
             using (var db = new ProductDbContext())
             {
+                // join als je ook de properties met datatype van andere klasse wil oproepen
                 var listOfCategories = db.Categories.Include(x => x.Products).ToList();
                 return listOfCategories;
             }
@@ -71,10 +72,10 @@ namespace WebAPIProject.Services
                     {
                         totalprice += product.Price;
                     }
-                    var newClassTotalPrices = new CategoriesTotalPrices();
-                    newClassTotalPrices.Name = category.Name;
-                    newClassTotalPrices.totalPrice = totalprice;
-                    listTotalPrices.Add(newClassTotalPrices);
+                    var newCategoriesTotalPrices = new CategoriesTotalPrices();
+                    newCategoriesTotalPrices.Name = category.Name;
+                    newCategoriesTotalPrices.totalPrice = totalprice;
+                    listTotalPrices.Add(newCategoriesTotalPrices);
                 }
                 return listTotalPrices;
             }
