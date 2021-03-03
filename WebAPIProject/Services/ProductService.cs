@@ -13,7 +13,7 @@ namespace WebAPIProject.Services
     {
         public void AddProduct(Product product)
         {
-            using(var db = new ProductDbContext())
+            using(var db = new ProductDbContext()) // using steeds met een klasseobject dat erft van IDisposable
             {
                 db.Products.Add(product);
                 db.SaveChanges();
@@ -24,7 +24,7 @@ namespace WebAPIProject.Services
         {
             using (var db = new ProductDbContext())
             {
-                var product = db.Products.Find(productId);
+                var product = db.Products.Find(productId); // Find steeds op primary key
                 db.Products.Remove(product);
                 db.SaveChanges();
             }
@@ -34,7 +34,7 @@ namespace WebAPIProject.Services
         {
             using (var db = new ProductDbContext())
             {
-                return db.Products.Include(x=>x.Category).ToList(); // join voor korte weergave categorienaam
+                return db.Products.Include( x => x.Category).ToList(); // join voor korte weergave categorienaam
             }
         }
 

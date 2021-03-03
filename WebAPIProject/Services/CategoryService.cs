@@ -16,11 +16,9 @@ namespace WebAPIProject.Services
         {
             using(var db = new ProductDbContext()) // using met objecten die erven van IDisposable (automatisch sluiten)
             {
-                var newCategory = new Category();
-                newCategory.Name = category.Name;
-                db.Categories.Add(newCategory);
+                db.Categories.Add(category);
                 db.SaveChanges();
-                return newCategory;
+                return category;
             }
         }
 

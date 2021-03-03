@@ -14,6 +14,6 @@ namespace WebAPIProject.Db
         public DbSet<House> Houses { get; set; }
         public DbSet<CategoriesTotalPrices> CategoriesTotalPrices { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options) // Microsoft Entity Framework Core SQLite installeren
-            => options.UseSqlite("Data Source=products.db"); // mag eender welke naam zijn (is geen referentie naar tabellen ofzo)
+            => options.UseSqlite("Data Source=products.db"); // db-file: mag eender welke naam zijn (is geen referentie naar tabellen ofzo)
     }
 }
